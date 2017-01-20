@@ -18,10 +18,6 @@ public class BrowseFragment extends Fragment {
 
     public BrowseFragment() {}
 
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-
-    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

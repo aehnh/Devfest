@@ -84,6 +84,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navigationView.setCheckedItem(R.id.home);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, new HomeFragment());
+        fragmentTransaction.commit();
 
         View header = navigationView.getHeaderView(0);
         tv_name = (TextView)header.findViewById(R.id.tv_name);
@@ -92,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
-            public void onDrawerClosed(View v){
+            public void onDrawerClosed(View v) {
                 super.onDrawerClosed(v);
             }
 
