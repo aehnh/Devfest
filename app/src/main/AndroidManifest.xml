@@ -29,6 +29,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD8VNCHFJdmsrs4xrV3fbs-QcabUFxcTA0" />
+        <activity
+            android:name=".AddRoomActivity"
+            android:label="@string/title_activity_add_room"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>
