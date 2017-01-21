@@ -57,7 +57,7 @@ public class BrowseFragment extends Fragment {
                 case 0:
                     return new TextFragment();
                 case 1:
-                    return new MapFragment();
+                    return new MapFragment2();
             }
 
             return null;
@@ -73,9 +73,9 @@ public class BrowseFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Findrooms";
+                    return "Near Room";
                 case 1:
-                    return "Myrooms";
+                    return "Map";
             }
             return null;
         }
