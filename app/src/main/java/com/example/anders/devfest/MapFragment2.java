@@ -36,6 +36,7 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate( R.layout.map, container, false );
 
+
         mMapView=(MapView) view.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
@@ -74,7 +75,7 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
         mMarkers.put(m,0);
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(MyPlace));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
     }
 }
