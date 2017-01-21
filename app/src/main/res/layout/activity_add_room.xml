@@ -67,7 +67,7 @@
             android:inputType="textMultiLine"
             android:gravity="top"
             android:textSize="18sp"
-            android:id="@+id/editText3"
+            android:id="@+id/editText2"
             android:hint="Description" />
 
     </LinearLayout>

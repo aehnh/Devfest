@@ -7,8 +7,10 @@
     tools:context="com.example.anders.devfest.BrowseFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -16,7 +18,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_add_white_24dp"
+        android:src="@drawable/ic_group_add_white_24dp"
         app:fabSize="normal"
         android:id="@+id/floatingActionButton" />
 

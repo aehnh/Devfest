@@ -4,16 +4,13 @@ import android.location.Location;
 
 import java.util.ArrayList;
 
-/**
- * Created by q on 2017-01-21.
- */
-
 public class Room {
 
     private String name;
     private int capacity;
     private String description;
     private Location location;
+    private String owner;
     private ArrayList<String> members;
 
     public String getName(){ return name;}
@@ -21,14 +18,17 @@ public class Room {
     public int getSize(){return members.size();}
     public String getDescription(){return description;}
     public Location getLocation(){return location;}
+    public String getOwner() { return owner; }
     public ArrayList<String> getMembers(){return members;}
 
-    public Room(String name,int capacity,String description,Location location, ArrayList<String> members){
+    public Room(String name,int capacity, String description, Location location, String creator) {
         this.name=name;
         this.capacity=capacity;
         this.description=description;
         this.location=location;
-        this.members=members;
+        this.owner = creator;
+        members = new ArrayList<String>();
+        members.add(creator);
     }
 
     public void addMember(String member) {
