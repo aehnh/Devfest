@@ -2,7 +2,6 @@ package com.example.anders.devfest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 public class SettingsFragment extends Fragment {
 
+    public static int finalized;
     public SettingsFragment() {}
 
     @Nullable
@@ -42,11 +42,12 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                int finalized = seekBar.getProgress() + 50;
+                finalized = seekBar.getProgress() + 50;
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("distance", finalized);
                 editor.commit();
+
             }
         });
 
