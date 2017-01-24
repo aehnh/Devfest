@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,43 +90,6 @@ public class ViewRoomActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.action_kick:
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewRoomActivity.this);
-                builderSingle.setTitle("Kick");
-
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewRoomActivity.this, android.R.layout.simple_selectable_list_item);
-                final ArrayList<String> members = room.getMembers();
-                final ArrayList<String> memberNames = room.getMemberNames();
-                for(int i = 1; i < memberNames.size(); i++) {
-                    arrayAdapter.add(memberNames.get(i));
-                }
-
-                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String strName = arrayAdapter.getItem(which);
-                        AlertDialog.Builder builderInner = new AlertDialog.Builder(ViewRoomActivity.this);
-                        builderInner.setMessage(strName);
-                        builderInner.setTitle("Are you sure you want to kick this user?");
-                        builderInner.setPositiveButton("Kick", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                room.removeMember(memberNames.get(which + 1), members.get(which + 1));
-                                databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
-                                dialog.dismiss();
-                            }
-                        });
-                        builderInner.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builderInner.show();
-                    }
-                });
-                builderSingle.show();
                 return true;
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
