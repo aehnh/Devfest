@@ -2,6 +2,7 @@ package com.example.anders.devfest;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
-import static com.example.anders.devfest.HomeFragment.myRooms;
+import static com.example.anders.devfest.HomeActivity.Rooms;
 
 
 /**
@@ -75,10 +76,12 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
         }
 
 
-        for(int i=0;i<myRooms.size();i++){
+        for(int i=0;i<Rooms.size();i++){
 
-            Room r=myRooms.get(i);
+            Room r=Rooms.get(i);
             Place=new LatLng(r.getLatitude(),r.getLongitude());
+            Log.d("location",Double.toString(r.getLatitude())+" "+Double.toString(r.getLongitude()));
+
             Marker m=googleMap.addMarker(new MarkerOptions().position(Place).title(r.getName()).snippet(r.getDescription()));
             mMarkers.put(m,0);
 

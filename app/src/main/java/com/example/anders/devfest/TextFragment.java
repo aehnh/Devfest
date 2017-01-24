@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import static com.example.anders.devfest.HomeFragment.Rooms;
+import static com.example.anders.devfest.HomeActivity.Rooms;
 
 
 public class TextFragment extends Fragment {
