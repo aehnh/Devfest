@@ -1,6 +1,5 @@
 package com.example.anders.devfest;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -44,9 +43,7 @@ public class BrowseFragment extends Fragment {
         getActivity().setTitle("Find Room");
     }
 
-    public void onClickHandler() {
-        startActivity(new Intent(getActivity().getApplicationContext(), ViewRoomActivity2.class));
-    }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

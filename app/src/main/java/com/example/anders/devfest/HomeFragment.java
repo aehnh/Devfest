@@ -12,14 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
+import static com.example.anders.devfest.HomeActivity.myRooms;
 
 
 public class HomeFragment extends Fragment {
@@ -29,84 +22,10 @@ public class HomeFragment extends Fragment {
 
     public HomeFragment() {}
 
-    private FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference=firebaseDatabase.getReference();
-    public static ArrayList<Room> Rooms=new ArrayList<>();
-    public static ArrayList<Room> myRooms=new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        Rooms=new ArrayList<>();
-        myRooms=new ArrayList<>();
-        databaseReference.child("RoomInfo").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
-                Room room=dataSnapshot.getValue(Room.class);
-                Rooms.add(room);
-
-                if(room.getMembers().contains(uid)) {
-                    myRooms.add(room);
-                    adapter.notifyDataSetChanged();
-                }
-
-               /* if(getView()!=null)
-                    draw(getView());
-                */
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {/*
-
-                Room room=dataSnapshot.getValue(Room.class);
-                String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                for(int i=0;i<Rooms.size();i++){
-
-                    if(Rooms.get(i).getName()==room.getName()) {
-
-                        if(Rooms.get(i).getMembers().contains(uid) && !room.getMembers().contains(uid))
-                            myRooms.remove(Rooms.get(i));
-                        else if(!Rooms.get(i).getMembers().contains(uid) && room.getMembers().contains(uid))
-                            myRooms.add(room);
-
-                        Rooms.set(i,room);
-                        break;
-                    }
-                }  */
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-               /* Room room=dataSnapshot.getValue(Room.class);
-
-                String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
-                for(int i=0;i<Rooms.size();i++){
-
-                    if(Rooms.get(i).getName()==room.getName()) {
-
-                        if(room.getMembers().contains(uid))
-                            myRooms.remove(room);
-
-                        Rooms.remove(i);
-                        break;
-                    }
-                } */
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
     @Override
