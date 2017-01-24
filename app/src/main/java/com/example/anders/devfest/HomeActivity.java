@@ -105,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         Rooms.set(i,room);
                         if(TextFragment.adapter != null) {
+                            TextFragment.cancer();
                             TextFragment.adapter.notifyDataSetChanged();
                         }
                         break;
