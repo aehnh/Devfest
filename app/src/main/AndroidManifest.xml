@@ -37,8 +37,9 @@
             android:name=".AddRoomActivity"
             android:label="@string/title_activity_add_room"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".ViewRoomActivity"></activity>
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ViewRoomActivity" />
+        <activity android:name=".ViewRoomActivity2"></activity>
     </application>
 
 </manifest>
