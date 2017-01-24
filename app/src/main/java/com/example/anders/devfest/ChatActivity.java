@@ -1,6 +1,7 @@
 package com.example.anders.devfest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,12 +34,15 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Intent intent = getIntent();
+        String key = intent.getStringExtra("key");
+
         listView = (ListView) findViewById(R.id.chat);
         editText = (EditText) findViewById(R.id.word);
         sendButton = (Button) findViewById(R.id.send);
 
         //Todo: change message to Room key
-        databaseReference.child("message").addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        databaseReference.child(key).addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ChatData chatData = dataSnapshot.getValue(ChatData.class);  // chatData를 가져오고

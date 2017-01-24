@@ -2,12 +2,14 @@ package com.example.anders.devfest;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,12 +43,21 @@ public class ViewRoomActivity extends AppCompatActivity {
         TextView textView2 = (TextView)findViewById(R.id.textView2);
         TextView textView3 = (TextView)findViewById(R.id.textView3);
         TextView textView4 = (TextView)findViewById(R.id.textView4);
+        FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra("key", room.getKey());
+                startActivity(intent);
+            }
+        });
 
         textView1.setText(room.getName());
         ArrayList<String> members = room.getMemberNames();
         String stringized = "";
         Boolean ownered = false;
-        for(int i = 0; i < room.getSize(); i++) {
+        for(int i = 0; i < members.size(); i++) {
             String member = members.get(i);
             stringized += member;
             if(!ownered && member.equals(room.getOwnerName())) {

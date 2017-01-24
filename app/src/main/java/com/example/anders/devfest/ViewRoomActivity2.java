@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class ViewRoomActivity2 extends AppCompatActivity {
 
@@ -32,6 +36,29 @@ public class ViewRoomActivity2 extends AppCompatActivity {
 
         Intent intent = getIntent();
         room = (Room)intent.getSerializableExtra("Room");
+
+        TextView textView1 = (TextView)findViewById(R.id.textView1);
+        TextView textView2 = (TextView)findViewById(R.id.textView2);
+        TextView textView3 = (TextView)findViewById(R.id.textView3);
+        TextView textView4 = (TextView)findViewById(R.id.textView4);
+
+        textView1.setText(room.getName());
+        ArrayList<String> members = room.getMemberNames();
+        String stringized = "";
+        Boolean ownered = false;
+        for(int i = 0; i < members.size(); i++) {
+            String member = members.get(i);
+            stringized += member;
+            if(!ownered && member.equals(room.getOwnerName())) {
+                stringized += " (owner)";
+            }
+            if(i != room.getSize() - 1) {
+                stringized += ", ";
+            }
+        }
+        textView2.setText(stringized);
+        textView3.setText(room.getDescription());
+        textView4.setText("Members (" + Integer.toString(room.getSize()) + " / " + Integer.toString(room.getCapacity()) + ")");
     }
 
     @Override
@@ -48,13 +75,17 @@ public class ViewRoomActivity2 extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_join:
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                room.addMember(user.getUid(), user.getDisplayName());
-                databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
-                Intent intent = new Intent(this, ViewRoomActivity.class);
-                intent.putExtra("Room", room);
-                startActivity(intent);
-                finish();
+                if(room.getSize() >= room.getCapacity()) {
+                    Toast.makeText(this, "This room is full", Toast.LENGTH_SHORT).show();
+                } else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    room.addMember(user.getUid(), user.getDisplayName());
+                    databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
+                    Intent intent = new Intent(this, ViewRoomActivity.class);
+                    intent.putExtra("Room", room);
+                    startActivity(intent);
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
