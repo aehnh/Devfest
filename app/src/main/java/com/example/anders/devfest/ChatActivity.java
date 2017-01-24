@@ -47,12 +47,13 @@ public class ChatActivity extends Activity {
             @Override
             public void onClick(View v) {
                 ChatData chatData=new ChatData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),editText.getText().toString());
-                databaseReference.child(key).push().setValue(chatData);
+                databaseReference.child("ChatInfo").child(key).push().setValue(chatData);
+                editText.setText("");
             }
         });
 
         //Todo: change message to Room key
-        databaseReference.child(key).addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        databaseReference.child("ChatInfo").child(key).addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ChatData chatData = dataSnapshot.getValue(ChatData.class);  // chatData를 가져오고
@@ -74,6 +75,6 @@ public class ChatActivity extends Activity {
         });
 
         adapter=new chatAdapter(getApplicationContext(),R.layout.lv_item,item);
-
+        listView.setAdapter(adapter);
     }
 }
