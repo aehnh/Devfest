@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    public static RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     public static RecyclerView.Adapter adapter;
 
     public HomeFragment() {}
@@ -52,10 +52,6 @@ public class HomeFragment extends Fragment {
                     myRooms.add(room);
                     adapter.notifyDataSetChanged();
                 }
-
-               /* if(getView()!=null)
-                    draw(getView());
-                */
             }
 
             @Override
@@ -143,22 +139,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //draw(getView());
     }
 
     public void onClickHandler() {
         startActivity(new Intent(getActivity().getApplicationContext(), ViewRoomActivity.class));
-    }
-
-    public void draw(View v){
-        /*
-        recyclerView = (RecyclerView)v.findViewById(R.id.recycler);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        adapter = new CustomAdapter(myRooms, HomeFragment.this);
-        recyclerView.setAdapter(adapter);  */
     }
 }

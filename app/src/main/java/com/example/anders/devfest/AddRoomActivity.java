@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,7 +62,6 @@ public class AddRoomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 GpsInfo gps=new GpsInfo(getApplicationContext());
                 if (gps.isGetLocation()) {
-
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
                     lati.setText(Double.toString(latitude));
@@ -95,16 +95,22 @@ public class AddRoomActivity extends AppCompatActivity {
                 String description = editText2.getText().toString();
                 Integer capacity = (Integer)spinner.getSelectedItem();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Double latitude = Double.parseDouble(lati.getText().toString());
+                Double longitude = Double.parseDouble(longi.getText().toString());
 
                 if(user == null) {
                     startActivity(new Intent(this, AuthenticationActivity.class));
+                } else if(name.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter the room name", Toast.LENGTH_SHORT).show();
+                } else if(description.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter the room description", Toast.LENGTH_SHORT).show();
+                } else if(latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+                    Toast.makeText(getApplicationContext(), "Please enter a valid location", Toast.LENGTH_SHORT).show();
                 } else {
-
                     Room room = new Room(name, capacity, description, Double.parseDouble(lati.getText().toString()),Double.parseDouble(longi.getText().toString()), user.getUid());
-                    // TODO instead of adding to HomeFragment.myRooms, add to firebase db
                     databaseReference.child("RoomInfo").child(name).setValue(room);
+                    finish();
                 }
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
