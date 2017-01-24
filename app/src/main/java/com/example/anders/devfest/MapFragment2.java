@@ -2,7 +2,6 @@ package com.example.anders.devfest;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +58,13 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
         LatLng Place;
         // GPS 사용유무 가져오기
 
+        double latitude=0 ;
+        double longitude=0 ;
+
         if (gps.isGetLocation()) {
 
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+            latitude=gps.getLatitude();
+            longitude=gps.getLongitude();
             MyPlace=new LatLng(latitude,longitude);
 
             //경도 위도 출력력
@@ -74,14 +76,36 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
 
         for(int i=0;i<Rooms.size();i++){
 
-            Room r=Rooms.get(i);
-            Place=new LatLng(r.getLatitude(),r.getLongitude());
-            Log.d("location",Double.toString(r.getLatitude())+" "+Double.toString(r.getLongitude()));
+            float distance;
+            Room r;
 
-            Marker m=googleMap.addMarker(new MarkerOptions().position(Place).title(r.getName()).snippet(r.getDescription()));
-            mMarkers.put(m,0);
+            Location loc1=new Location("loc1");
+            Location loc2=new Location("loc2");
+            r = Rooms.get(i);
 
+
+            loc1.setLatitude(r.getLatitude());
+            loc1.setLongitude(r.getLongitude());
+
+            loc2.setLatitude(latitude);
+            loc2.setLongitude(longitude);
+
+            distance=loc1.distanceTo(loc2);
+
+
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
+            int finalized = sharedPreferences.getInt("distance", 50);
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            if(distance / 1000 <= finalized && !r.getMembers().contains(uid)) {
+
+                Place=new LatLng(r.getLatitude(),r.getLongitude());
+                Marker m=googleMap.addMarker(new MarkerOptions().position(Place).title(r.getName()).snippet(r.getDescription()));
+                mMarkers.put(m,0);
+
+            }
         }
+
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(MyPlace));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
@@ -109,6 +133,8 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                // marker.hideInfoWindow();
+
 
             }
         });
