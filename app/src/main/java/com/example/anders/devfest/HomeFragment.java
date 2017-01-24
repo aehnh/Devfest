@@ -1,6 +1,5 @@
 package com.example.anders.devfest;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,8 +35,8 @@ public class HomeFragment extends Fragment {
     public static ArrayList<Room> myRooms=new ArrayList<>();
 
     @Override
-    public void onAttach(Context context){
-        super.onAttach(context);
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
 
         Rooms=new ArrayList<>();
         myRooms=new ArrayList<>();
@@ -49,11 +48,14 @@ public class HomeFragment extends Fragment {
                 Room room=dataSnapshot.getValue(Room.class);
                 Rooms.add(room);
 
-                if(room.getMembers().contains(uid))
+                if(room.getMembers().contains(uid)) {
                     myRooms.add(room);
+                    adapter.notifyDataSetChanged();
+                }
 
-               if(getView()!=null)
+               /* if(getView()!=null)
                     draw(getView());
+                */
             }
 
             @Override
@@ -105,11 +107,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
 
     }
     @Override
@@ -124,6 +121,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        adapter = new CustomAdapter(myRooms, HomeFragment.this);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -146,7 +151,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void draw(View v){
-
+        /*
         recyclerView = (RecyclerView)v.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -154,6 +159,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         adapter = new CustomAdapter(myRooms, HomeFragment.this);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);  */
     }
 }

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import static com.example.anders.devfest.HomeFragment.Rooms;
-import static com.example.anders.devfest.SettingsFragment.finalized;
 
 
 public class TextFragment extends Fragment {
@@ -40,29 +39,30 @@ public class TextFragment extends Fragment {
         view.findViewById(R.id.floatingActionButton).setVisibility(View.GONE);
 
         ArrayList<Room> inner=new ArrayList<>();
+        double latitude=0;
+        double longitude=0;
+
+        GpsInfo gps=new GpsInfo(getContext());
+        if (gps.isGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+            //경도 위도 출력력
+        } else {
+            // GPS 를 사용할수 없으므로
+            gps.showSettingsAlert();
+            Log.d("alert","22222222222");
+        }
 
         for(int i=0;i<Rooms.size();i++){
 
             float distance;
             Room r;
-            double latitude=0;
-            double longitude=0;
+
             Location loc1=new Location("loc1");
             Location loc2=new Location("loc2");
             r=Rooms.get(i);
 
-            GpsInfo gps=new GpsInfo(getContext());
-
-            if (gps.isGetLocation()) {
-
-                latitude = gps.getLatitude();
-                longitude = gps.getLongitude();
-                //경도 위도 출력력
-            } else {
-                // GPS 를 사용할수 없으므로
-                gps.showSettingsAlert();
-                Log.d("alert","22222222222");
-            }
 
             loc1.setLatitude(r.getLatitude());
             loc1.setLongitude(r.getLongitude());

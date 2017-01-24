@@ -99,6 +99,7 @@ public class AddRoomActivity extends AppCompatActivity {
                 if(user == null) {
                     startActivity(new Intent(this, AuthenticationActivity.class));
                 } else {
+
                     Room room = new Room(name, capacity, description, Double.parseDouble(lati.getText().toString()),Double.parseDouble(longi.getText().toString()), user.getUid());
                     // TODO instead of adding to HomeFragment.myRooms, add to firebase db
                     databaseReference.child("RoomInfo").child(name).setValue(room);
