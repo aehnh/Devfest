@@ -25,14 +25,14 @@ public class SettingsFragment extends Fragment {
         SeekBar seekBar = (SeekBar)view.findViewById(R.id.seekBar);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
-        int distance = sharedPreferences.getInt("distance", 50);
+        int distance = sharedPreferences.getInt("distance", 100);
         textView.setText(Integer.toString(distance));
-        seekBar.setProgress(distance - 50);
+        seekBar.setProgress(distance);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText(Integer.toString(progress + 50));
+                textView.setText(Integer.toString(progress));
             }
 
             @Override
@@ -42,7 +42,7 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                finalized = seekBar.getProgress() + 50;
+                finalized = seekBar.getProgress();
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("distance", finalized);
