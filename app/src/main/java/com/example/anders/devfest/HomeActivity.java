@@ -25,8 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import static com.example.anders.devfest.HomeFragment.adapter;
-
 public class HomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -64,56 +62,73 @@ public class HomeActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
-                Room room=dataSnapshot.getValue(Room.class);
+                Room room = dataSnapshot.getValue(Room.class);
                 Rooms.add(room);
+                if(TextFragment.adapter != null) {
+                    TextFragment.adapter.notifyDataSetChanged();
+                }
 
                 if(room.getMembers().contains(uid)) {
                     myRooms.add(room);
-                    adapter.notifyDataSetChanged();
+                    HomeFragment.adapter.notifyDataSetChanged();
                 }
-
-               /* if(getView()!=null)
-                    draw(getView());
-                */
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {/*
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                Room room=dataSnapshot.getValue(Room.class);
-                String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Room room = dataSnapshot.getValue(Room.class);
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                for(int i=0;i<Rooms.size();i++){
+                for(int i = 0; i < Rooms.size(); i++){
 
-                    if(Rooms.get(i).getName()==room.getName()) {
+                    if(Rooms.get(i).getKey().equals(room.getKey())) {
 
                         if(Rooms.get(i).getMembers().contains(uid) && !room.getMembers().contains(uid))
-                            myRooms.remove(Rooms.get(i));
-                        else if(!Rooms.get(i).getMembers().contains(uid) && room.getMembers().contains(uid))
+                            for(int j = 0; j < myRooms.size(); j++) {
+                                if(myRooms.get(j).getKey().equals(room.getKey())) {
+                                    myRooms.remove(j);
+                                    HomeFragment.adapter.notifyDataSetChanged();
+                                }
+                            }
+                        else if(!Rooms.get(i).getMembers().contains(uid) && room.getMembers().contains(uid)) {
                             myRooms.add(room);
+                            HomeFragment.adapter.notifyDataSetChanged();
+                        }
 
                         Rooms.set(i,room);
+                        if(TextFragment.adapter != null) {
+                            TextFragment.adapter.notifyDataSetChanged();
+                        }
                         break;
                     }
-                }  */
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-               /* Room room=dataSnapshot.getValue(Room.class);
+               Room room = dataSnapshot.getValue(Room.class);
 
-                String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
-                for(int i=0;i<Rooms.size();i++){
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                for(int i = 0;i < Rooms.size(); i++){
 
-                    if(Rooms.get(i).getName()==room.getName()) {
+                    if(Rooms.get(i).getKey().equals(room.getKey())) {
 
                         if(room.getMembers().contains(uid))
-                            myRooms.remove(room);
+                            for(int j = 0; j < myRooms.size(); j++) {
+                                if(myRooms.get(j).getKey().equals(room.getKey())) {
+                                    myRooms.remove(j);
+                                    HomeFragment.adapter.notifyDataSetChanged();
+                                }
+                            }
 
                         Rooms.remove(i);
+                        if(TextFragment.adapter != null) {
+                            TextFragment.adapter.notifyDataSetChanged();
+                        }
                         break;
                     }
-                } */
+                }
             }
 
             @Override

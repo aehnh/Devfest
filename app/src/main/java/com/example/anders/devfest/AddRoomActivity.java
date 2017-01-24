@@ -29,8 +29,8 @@ public class AddRoomActivity extends AppCompatActivity {
 
 
     private ImageButton ib;
-    private FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference=firebaseDatabase.getReference();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private TextView lati;
     private TextView longi;
 
@@ -107,8 +107,10 @@ public class AddRoomActivity extends AppCompatActivity {
                 } else if(latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
                     Toast.makeText(getApplicationContext(), "Please enter a valid location", Toast.LENGTH_SHORT).show();
                 } else {
-                    Room room = new Room(name, capacity, description, Double.parseDouble(lati.getText().toString()),Double.parseDouble(longi.getText().toString()), user.getUid());
-                    databaseReference.child("RoomInfo").child(name).setValue(room);
+                    Room room = new Room(name, capacity, description, Double.parseDouble(lati.getText().toString()),Double.parseDouble(longi.getText().toString()), user.getUid(), user.getDisplayName());
+                    String key = databaseReference.child("RoomInfo").push().getKey();
+                    room.setKey(key);
+                    databaseReference.child("RoomInfo").child(key).setValue(room);
                     finish();
                 }
                 return true;

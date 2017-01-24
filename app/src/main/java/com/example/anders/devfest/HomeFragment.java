@@ -18,7 +18,7 @@ import static com.example.anders.devfest.HomeActivity.myRooms;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    public static RecyclerView.Adapter adapter;
+    public static RecyclerView.Adapter adapter = null;
 
     public HomeFragment() {}
 
@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new CustomAdapter(myRooms, HomeFragment.this);
+        adapter = new CustomAdapter(myRooms, R.layout.card_item, HomeFragment.this);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -58,7 +58,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
     }
 
-    public void onClickHandler() {
-        startActivity(new Intent(getActivity().getApplicationContext(), ViewRoomActivity.class));
+    public void onClickHandler(Room room) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), ViewRoomActivity.class);
+        intent.putExtra("Room", room);
+        startActivity(intent);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     private ArrayList<Room> rooms;
     private Fragment fragment;
+    private int resource;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -38,8 +40,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         }
     }
 
-    public CustomAdapter(ArrayList<Room> rooms, Fragment fragment) {
+    public CustomAdapter(ArrayList<Room> rooms, int resource, Fragment fragment) {
         this.rooms = rooms;
+        this.resource = resource;
         this.fragment = fragment;
     }
 
@@ -50,7 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
 
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
@@ -58,8 +61,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Room room = rooms.get(position);
-        if(room.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        final Room room = rooms.get(position);
+        if(resource == R.layout.card_item && room.getOwner().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             holder.imageViewStatus.setImageResource(R.drawable.ic_star_black_24dp);
         }
         holder.textViewStatus.setText(Integer.toString(room.getSize()) + " / " + Integer.toString(room.getCapacity()));
@@ -69,7 +72,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeFragment)fragment).onClickHandler();
+                if(fragment instanceof HomeFragment) {
+                    ((HomeFragment) fragment).onClickHandler(room);
+                } else if(fragment instanceof TextFragment) {
+                    ((TextFragment) fragment).onClickHandler(room);
+                }
             }
         });
     }

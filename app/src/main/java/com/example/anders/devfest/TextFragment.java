@@ -1,6 +1,7 @@
 package com.example.anders.devfest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 import static com.example.anders.devfest.HomeActivity.Rooms;
@@ -22,13 +25,12 @@ import static com.example.anders.devfest.HomeActivity.Rooms;
 public class TextFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    public static RecyclerView.Adapter adapter = null;
 
     public TextFragment() {}
 
     @Nullable
     @Override
-
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
@@ -38,7 +40,7 @@ public class TextFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.findViewById(R.id.floatingActionButton).setVisibility(View.GONE);
 
-        ArrayList<Room> inner=new ArrayList<>();
+        ArrayList<Room> inner = new ArrayList<Room>();
         double latitude=0;
         double longitude=0;
 
@@ -61,7 +63,7 @@ public class TextFragment extends Fragment {
 
             Location loc1=new Location("loc1");
             Location loc2=new Location("loc2");
-            r=Rooms.get(i);
+            r = Rooms.get(i);
 
 
             loc1.setLatitude(r.getLatitude());
@@ -75,8 +77,10 @@ public class TextFragment extends Fragment {
             Log.d("distance",Float.toString(distance));
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
             int finalized = sharedPreferences.getInt("distance", 50);
-            if(distance/1000<=finalized)
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if(distance / 1000 <= finalized && !r.getMembers().contains(uid)) {
                 inner.add(r);
+            }
         }
 
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler);
@@ -85,9 +89,15 @@ public class TextFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new CustomAdapter(inner, this);
+        adapter = new CustomAdapter(inner, R.layout.card_item2, TextFragment.this);
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    public void onClickHandler(Room room) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), ViewRoomActivity2.class);
+        intent.putExtra("Room", room);
+        startActivity(intent);
     }
 }
