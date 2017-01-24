@@ -31,10 +31,6 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private HashMap<Marker,Integer> mMarkers=new HashMap<>();
 
-    public void OnCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate( R.layout.map, container, false );
@@ -113,7 +109,7 @@ public class MapFragment2 extends Fragment implements OnMapReadyCallback {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                // marker.hideInfoWindow();
+
             }
         });
     }

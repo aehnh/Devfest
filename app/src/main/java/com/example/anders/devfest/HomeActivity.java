@@ -95,8 +95,12 @@ public class HomeActivity extends AppCompatActivity {
                             myRooms.add(room);
                             HomeFragment.adapter.notifyDataSetChanged();
                         } else if(Rooms.get(i).getMembers().contains(uid) && room.getMembers().contains(uid)) {
-                            myRooms.set(i, room);
-                            HomeFragment.adapter.notifyDataSetChanged();
+                            for(int j = 0; j < myRooms.size(); j++) {
+                                if(myRooms.get(j).getKey().equals(room.getKey())) {
+                                    myRooms.set(j, room);
+                                    HomeFragment.adapter.notifyDataSetChanged();
+                                }
+                            }
                         }
 
                         Rooms.set(i,room);

@@ -10,8 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,8 +74,13 @@ public class ViewRoomActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view, menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(room.getOwner().equals(user.getUid())) {
+            getMenuInflater().inflate(R.menu.menu_manage, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_view, menu);
+        }
         return true;
     }
 
@@ -85,30 +90,66 @@ public class ViewRoomActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_kick:
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewRoomActivity.this);
+                builderSingle.setTitle("Kick");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewRoomActivity.this, android.R.layout.simple_selectable_list_item);
+                final ArrayList<String> members = room.getMembers();
+                final ArrayList<String> memberNames = room.getMemberNames();
+                for(int i = 1; i < memberNames.size(); i++) {
+                    arrayAdapter.add(memberNames.get(i));
+                }
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(ViewRoomActivity.this);
+                        builderInner.setMessage(strName);
+                        builderInner.setTitle("Are you sure you want to kick this user?");
+                        builderInner.setPositiveButton("Kick", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,int which) {
+                                room.removeMember(memberNames.get(which + 1), members.get(which + 1));
+                                databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
+                                dialog.dismiss();
+                            }
+                        });
+                        builderInner.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builderInner.show();
+                    }
+                });
+                builderSingle.show();
+                return true;
+            case R.id.action_delete:
+                new AlertDialog.Builder(this)
+                        .setTitle("Disband")
+                        .setMessage("Do you wish to disband this room?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                databaseReference.child("RoomInfo").child(room.getKey()).removeValue();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return true;
             case R.id.action_leave:
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(room.getOwner().equals(user.getUid())) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Disband")
-                            .setMessage("Do you wish to disband this room?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    databaseReference.child("RoomInfo").child(room.getKey()).removeValue();
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                } else {
-                    room.removeMember(user.getUid(), user.getDisplayName());
-                    databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
-                    finish();
-                }
+                room.removeMember(user.getUid(), user.getDisplayName());
+                databaseReference.child("RoomInfo").child(room.getKey()).setValue(room);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
