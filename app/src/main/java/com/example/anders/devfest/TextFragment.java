@@ -1,5 +1,7 @@
 package com.example.anders.devfest;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -71,6 +73,8 @@ public class TextFragment extends Fragment {
             distance=loc1.distanceTo(loc2);
 
             Log.d("distance",Float.toString(distance));
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("stalin did nothing wrong", Context.MODE_PRIVATE);
+            int finalized = sharedPreferences.getInt("distance", 50);
             if(distance/1000<=finalized)
                 inner.add(r);
         }
