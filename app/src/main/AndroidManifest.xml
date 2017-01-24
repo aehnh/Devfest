@@ -41,7 +41,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ViewRoomActivity" />
         <activity android:name=".ViewRoomActivity2"></activity>
-        
         <activity android:name=".ChatActivity"></activity>
     </application>
 
